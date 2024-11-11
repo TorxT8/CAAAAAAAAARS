@@ -12,6 +12,7 @@ with open('data.json') as f:
             car[0] = number
             table.add_row(car)
             number += 1
+print('joker')
 while choose != '6':
     print('1) Добавить машину')
     print('2) Удалить машину')
