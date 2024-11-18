@@ -2,7 +2,7 @@ from prettytable import PrettyTable
 import json
 import sys
 table = PrettyTable()
-table.field_names = ['Номер', 'Марка', 'Модель', 'Цвет', 'Двигатель', 'Статус']
+table.field_names = ['Номер', 'Марка', 'Модель', 'Цвет', 'Двигатель', 'Статус', 'Год']
 choose = '0'
 with open('data.json') as f:
     data = json.load(f)
@@ -79,8 +79,16 @@ while choose != '6':
             openn = 'Открыта'
         else:
             openn = 'Закрыта'
-        table.add_row([number, mark, model, color, motor, openn])
-        data.append([number, mark, model, color, motor, openn])
+        year = input('Год: ')
+        m = sum([1 for x in year if x in '1234567890'])
+        if year == '' or year[0] == ' ' or year[-1] == ' ' or m != 4:
+            while year == '' or year[0] == ' ' or year[-1] == ' ' or m != 4:
+                print('')
+                print('Некорректный ввод')
+                print('')
+                year = input('Год: ')
+        table.add_row([number, mark, model, color, motor, openn, year])
+        data.append([number, mark, model, color, motor, openn, year])
     if choose == '2':
         if len(data) > 0:
             delit = input('Введите номер машины: ')
@@ -157,7 +165,15 @@ while choose != '6':
                 openn = 'Открыта'
             else:
                 openn = 'Закрыта'
-            data[num-1] = [num, mark, model, color, motor, openn]
+            year = input('Год: ')
+            m = sum([1 for x in year if x in '1234567890'])
+            if year == '' or year[0] == ' ' or year[-1] == ' ' or m != 4:
+                while year == '' or year[0] == ' ' or year[-1] == ' ' or m != 4:
+                    print('')
+                    print('Некорректный ввод')
+                    print('')
+                    color = input('Цвет: ')
+            data[num-1] = [num, mark, model, color, motor, openn, year]
             table.clear_rows()
             for car in data:
                 table.add_row(car)
@@ -167,11 +183,12 @@ while choose != '6':
         if len(data) > 0:
             cars = data[:]
             table.clear_rows()
-            print('Чтобы не учитывать марку / модель / цвет, введите пустое значение')
+            print('Чтобы не учитывать марку / модель / цвет / год, введите пустое значение')
             print('')
             mark = input('Марка: ')
             model = input('Модель: ')
             color = input('Цвет: ')
+            year = input('Год: ')
             print('Двигатель заведён? (введите 1 ,2 или 3)')
             print('1. Да')
             print('2. Нет')
@@ -227,6 +244,10 @@ while choose != '6':
             if openn != '3':
                 for row in cars[:]:
                     if row[5] != openn:
+                        cars.remove(row)
+            if year != '' and year[-1] != ' ' and year[0] != ' ':
+                for row in cars[:]:
+                    if row[6] != year:
                         cars.remove(row)
             table.add_rows(cars)
             print('')
